@@ -2,7 +2,7 @@ using MediaWorld.Domain.Abstracts;
 
 namespace MediaWorld.Domain.Models
 {
-  public class Song : AMedia
+  public class Song : AAudio
   {
     
   }

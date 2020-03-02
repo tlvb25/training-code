@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 using MediaWorld.Domain.Abstracts;
 using MediaWorld.Domain.Models;
@@ -8,28 +9,33 @@ namespace MediaWorld.Storage.Adapters
 {
   public class FileAdapter
   {
-    private static string path = @"./medialib.xml";
-    private static string pathw = @"../medialibw.xml";
+    private static string _path = @"../medialib.xml";
     
-    public static IEnumerable<AMedia> Read()
+    public static IEnumerable<AMedia> Read(string path = null)
     {
-      var reader = new StreamReader(path);
-      var xml = new XmlSerializer(typeof(List<Song>));
-      var la = xml.Deserialize(reader) as List<Song>;
+      var p = path ?? _path; 
 
-      return la;
+      // path = path == null ? _path : path;
+
+      // if (path == null) {
+      //   path = _path;
+      // }
+
+      var reader = new StreamReader(p);
+      var xml = new XmlSerializer(typeof(List<AMedia>), new []{typeof(Book), typeof(Song)});
+
+      return xml.Deserialize(reader) as List<AMedia>;
     }
 
-    public static void Write()
+    public static bool Write(List<AMedia> lib)
     {
-      var writer = new StreamWriter(pathw);
-      var xml = new XmlSerializer(typeof(List<Song>));
-      var lib = new List<Song>()
+      using(var writer = new StreamWriter(_path))
       {
-        new Song()
-      };
+        var xml = new XmlSerializer(typeof(List<AMedia>), new []{typeof(Book), typeof(Song)});
 
-      xml.Serialize(writer, lib);
+        xml.Serialize(writer, lib);
+        return true;
+      }
     }
   }
 }

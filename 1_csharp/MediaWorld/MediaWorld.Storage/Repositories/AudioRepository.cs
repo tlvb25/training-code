@@ -1,20 +1,23 @@
 using System.Collections.Generic;
 using MediaWorld.Domain.Abstracts;
+using MediaWorld.Domain.Models;
 using MediaWorld.Storage.Adapters;
 
 namespace MediaWorld.Storage.Repositories
 {
   public class AudioRepository
   {
-    private readonly List<AMedia> _lib;
+    private static readonly List<AAudio> _lib = new List<AAudio>()
+    {
+      new Song() { Title = "Song 1"},
+      new Song() { Title = "Song 2"},
+      new Book() { Title = "Book 1"},
+      new Book() { Title = "Book 2"}
+    };
 
     public AudioRepository()
     {
-      if (_lib == null)
-      {
-        // _lib = (List<AMedia>) FileAdapter.Read(); // error
-        _lib = FileAdapter.Read() as List<AMedia>; // null
-      }
+      
     }
 
     public IEnumerable<AMedia> List()
